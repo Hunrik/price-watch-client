@@ -240,7 +240,7 @@ autoprefixer@^6.0.0, autoprefixer@^6.0.2, autoprefixer@^6.3.1, autoprefixer@^6.4
     postcss "^5.2.4"
     postcss-value-parser "^3.2.3"
 
-aws-sdk, aws-sdk@^2.1.0:
+aws-sdk, aws-sdk@*, aws-sdk@^2.1.0:
   version "2.6.15"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.6.15.tgz#64cb82363b6d12a7b0ab2a67a82ece2d61c65be8"
   dependencies:
@@ -1657,6 +1657,13 @@ configstore@^1.0.0:
     write-file-atomic "^1.1.2"
     xdg-basedir "^2.0.0"
 
+connect-dynamodb@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/connect-dynamodb/-/connect-dynamodb-1.0.9.tgz#67877ee589c8bb73741e50c8f337b1a88b718927"
+  dependencies:
+    aws-sdk "*"
+    connect "*"
+
 connect-flash@0.1.x:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/connect-flash/-/connect-flash-0.1.1.tgz#d8630f26d95a7f851f9956b1e8cc6732f3b6aa30"
@@ -1674,7 +1681,7 @@ connect-pg-simple@^3.1.0:
   dependencies:
     pg ">=2.7.0-0 <5.0.0-0"
 
-connect@^3.3.3, connect@^3.3.5:
+connect@*, connect@^3.3.3, connect@^3.3.5:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/connect/-/connect-3.5.0.tgz#b357525a0b4c1f50599cd983e1d9efeea9677198"
   dependencies:
@@ -6824,7 +6831,7 @@ right-align@^0.1.1:
   dependencies:
     align-text "^0.1.1"
 
-rimraf@^2.2.8, rimraf@^2.3.2, rimraf@^2.3.3, rimraf@^2.4.4, rimraf@^2.5.4, rimraf@~2.5.1, rimraf@~2.5.4, rimraf@2:
+rimraf, rimraf@^2.2.8, rimraf@^2.3.2, rimraf@^2.3.3, rimraf@^2.4.4, rimraf@^2.5.4, rimraf@~2.5.1, rimraf@~2.5.4, rimraf@2:
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.5.4.tgz#96800093cbf1a0c86bd95b4625467535c29dfa04"
   dependencies:
@@ -7838,7 +7845,7 @@ utils-merge@1.0.0, utils-merge@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.0.tgz#0294fb922bb9375153541c4f7096231f287c8af8"
 
-uuid@^2.0.1:
+uuid@^2.0.1, uuid@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
