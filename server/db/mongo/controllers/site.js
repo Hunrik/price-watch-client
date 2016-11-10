@@ -46,7 +46,7 @@ export const parseSitemap = async function (req, res) {
       return res.send(e)
     }
 }
-export const enqueProducts = async function (req, res) {
+/*export const enqueProducts = async function (req, res) {
     try {
       const sites = await URLmodel.getProductPages()
       let message = sites.map((site) => {
@@ -79,7 +79,7 @@ export const enqueProducts = async function (req, res) {
     } catch (e) {
       return res.status(500).send(e)
     }
-}
+}*/
 
 export const createSite = async function ({body}, res) {
   const domain = URL.parse(body.domain).hostname
