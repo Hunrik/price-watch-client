@@ -1,5 +1,5 @@
 module.exports = {
-  up(queryInterface, DataTypes) {
+  up (queryInterface, DataTypes) {
     return queryInterface.createTable(
       'Topics', {
         id: {
@@ -17,10 +17,10 @@ module.exports = {
           defaultValue: DataTypes.fn('NOW')
         }
       }
-    );
+    )
   },
 
-  down(queryInterface) {
-    return queryInterface.dropTable('Topics');
+  down (queryInterface) {
+    return queryInterface.dropTable('Topics')
   }
-};
+}

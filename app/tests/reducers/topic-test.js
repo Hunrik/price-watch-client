@@ -1,37 +1,37 @@
-import expect from 'expect';
-import md5 from 'spark-md5';
-import reducer from 'reducers/topic';
-import * as types from 'types';
+import expect from 'expect'
+import md5 from 'spark-md5'
+import reducer from 'reducers/topic'
+import * as types from 'types'
 
 describe('Topics reducer', () => {
-  const s = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const s = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
-  function createTopic() {
+  function createTopic () {
     return Array(5).join().split(',')
     .map(() => {
-      return s.charAt(Math.floor(Math.random() * s.length));
+      return s.charAt(Math.floor(Math.random() * s.length))
     })
-    .join('');
+    .join('')
   }
 
-  const topic = createTopic();
+  const topic = createTopic()
 
-  function createData() {
+  function createData () {
     return {
       text: createTopic(),
       id: md5.hash(createTopic()),
       count: Math.floor(Math.random() * 100)
-    };
+    }
   }
 
-  const data = createData();
+  const data = createData()
 
-  function createTopics(x) {
-    const arr = [];
+  function createTopics (x) {
+    const arr = []
     for (let i = 0; i < x; i++) {
-      arr.push(createData());
+      arr.push(createData())
     }
-    return arr;
+    return arr
   }
 
   it('Should return the initial state', () => {
@@ -42,8 +42,8 @@ describe('Topics reducer', () => {
         topics: [],
         newTopic: ''
       }
-    );
-  });
+    )
+  })
 
   it('Should add a new topic to an empty initial state', () => {
     expect(
@@ -62,8 +62,8 @@ describe('Topics reducer', () => {
           }
         ],
         newTopic: ''
-    });
-  });
+    })
+  })
 
   it('Should handle TYPING', () => {
     expect(
@@ -74,8 +74,8 @@ describe('Topics reducer', () => {
     ).toEqual({
         topics: [],
         newTopic: topic
-    });
-  });
+    })
+  })
 
   it('Should handle CREATE_REQUEST', () => {
     expect(
@@ -85,8 +85,8 @@ describe('Topics reducer', () => {
     ).toEqual({
         topics: [],
         newTopic: ''
-    });
-  });
+    })
+  })
 
   it('Should handle REQUEST_SUCCESS', () => {
     expect(
@@ -97,12 +97,12 @@ describe('Topics reducer', () => {
     ).toEqual({
         topics: topic,
         newTopic: ''
-    });
-  });
+    })
+  })
 
   it('Should handle CREATE_TOPIC_REQUEST', () => {
-    const topics = createTopics(20);
-    const newTopics = [...topics, data];
+    const topics = createTopics(20)
+    const newTopics = [...topics, data]
     expect(
       reducer({
         topics
@@ -117,13 +117,13 @@ describe('Topics reducer', () => {
     ).toEqual({
         newTopic: '',
         topics: newTopics
-    });
-  });
+    })
+  })
 
   it('should handle CREATE_TOPIC_FAILURE', () => {
-    const topics = createTopics(20);
-    topics.push(data);
-    const newTopics = [...topics];
+    const topics = createTopics(20)
+    topics.push(data)
+    const newTopics = [...topics]
     expect(
       reducer({
         topics,
@@ -136,13 +136,13 @@ describe('Topics reducer', () => {
     ).toEqual({
         topics: newTopics.pop() && newTopics,
         newTopic: topic
-    });
-  });
+    })
+  })
 
   it('should handle DESTROY_TOPIC', () => {
-    const topics = createTopics(20);
-    topics.push(data);
-    const newTopics = [...topics];
+    const topics = createTopics(20)
+    topics.push(data)
+    const newTopics = [...topics]
     expect(
       reducer({
         topics,
@@ -155,16 +155,16 @@ describe('Topics reducer', () => {
     ).toEqual({
         topics: newTopics.pop() && newTopics,
         newTopic: topic
-    });
-  });
+    })
+  })
 
   it('should handle INCREMENT_COUNT', () => {
-    const topics = createTopics(20);
-    const newTopics = [...topics];
-    topics.push(data);
-    const newData = Object.assign({}, data);
-    newData.count++;
-    newTopics.push(newData);
+    const topics = createTopics(20)
+    const newTopics = [...topics]
+    topics.push(data)
+    const newData = Object.assign({}, data)
+    newData.count++
+    newTopics.push(newData)
 
     expect(
       reducer({
@@ -178,16 +178,16 @@ describe('Topics reducer', () => {
     ).toEqual({
         topics: newTopics,
         newTopic: topic
-    });
-  });
+    })
+  })
 
   it('should handle DECREMENT_COUNT', () => {
-    const topics = createTopics(20);
-    const newTopics = [...topics];
-    topics.push(data);
-    const newData = Object.assign({}, data);
-    newData.count--;
-    newTopics.push(newData);
+    const topics = createTopics(20)
+    const newTopics = [...topics]
+    topics.push(data)
+    const newData = Object.assign({}, data)
+    newData.count--
+    newTopics.push(newData)
 
     expect(
       reducer({
@@ -201,6 +201,6 @@ describe('Topics reducer', () => {
     ).toEqual({
         topics: newTopics,
         newTopic: topic
-    });
-  });
-});
+    })
+  })
+})

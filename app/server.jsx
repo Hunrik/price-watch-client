@@ -1,25 +1,24 @@
-import axios from 'axios';
-import React from 'react';
-import { renderToString } from 'react-dom/server';
-import { createMemoryHistory, match, RouterContext } from 'react-router';
-import { Provider } from 'react-redux';
-import createRoutes from 'routes';
-import configureStore from 'store/configureStore';
-import * as types from 'types';
-import preRenderMiddleware from 'middlewares/preRenderMiddleware';
-import header from 'components/Meta';
+import axios from 'axios'
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+import { createMemoryHistory, match, RouterContext } from 'react-router'
+import { Provider } from 'react-redux'
+import createRoutes from 'routes'
+import configureStore from 'store/configureStore'
+import * as types from 'types'
+import preRenderMiddleware from 'middlewares/preRenderMiddleware'
+import header from 'components/Meta'
 
 const clientConfig = {
   host: process.env.HOSTNAME || 'localhost',
   port: process.env.PORT || '3000'
-};
+}
 
 // configure baseURL for axios requests (for serverside API calls)
-axios.defaults.baseURL = `http://${clientConfig.host}:${clientConfig.port}`;
-
+axios.defaults.baseURL = `http://${clientConfig.host}:${clientConfig.port}`
 
 const analtyicsScript =
-  typeof trackingID === "undefined" ? ``
+  typeof trackingID === 'undefined' ? ''
   :
   `<script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -28,8 +27,7 @@ const analtyicsScript =
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
     ga('create', ${trackingID}, 'auto');
     ga('send', 'pageview');
-  </script>`;
-
+  </script>`
 
 /*
  * To Enable Google analytics simply replace the hashes with your tracking ID
@@ -40,19 +38,16 @@ const analtyicsScript =
  * however the assignement  does not, so it is undefined for the type check above.
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting
  */
-const trackingID  = "'UA-########-#'";
-
-
-
+const trackingID = "'UA-########-#'"
 
 /*
  * Export render function to be used in server/config/routes.js
  * We grab the state passed in from the server and the req object from Express/Koa
  * and pass it into the Router.run function.
  */
-export default function render(req, res) {
-  const authenticated = req.isAuthenticated();
-  const history = createMemoryHistory();
+export default function render (req, res) {
+  const authenticated = req.isAuthenticated()
+  const history = createMemoryHistory()
   const store = configureStore({
     user: {
       authenticated,
@@ -60,8 +55,8 @@ export default function render(req, res) {
       message: '',
       isLogin: true
     }
-  }, history);
-  const routes = createRoutes(store);
+  }, history)
+  const routes = createRoutes(store)
 
   /*
    * From the react-router docs:
@@ -86,23 +81,23 @@ export default function render(req, res) {
    */
   match({routes, location: req.url}, (err, redirect, props) => {
     if (err) {
-      res.status(500).json(err);
+      res.status(500).json(err)
     } else if (redirect) {
-      res.redirect(302, redirect.pathname + redirect.search);
+      res.redirect(302, redirect.pathname + redirect.search)
     } else if (props) {
       // This method waits for all render component
       // promises to resolve before returning to browser
-      store.dispatch({ type: types.CREATE_REQUEST });
+      store.dispatch({ type: types.CREATE_REQUEST })
       preRenderMiddleware(props)
       .then(data => {
-        store.dispatch({ type: types.REQUEST_SUCCESS, data });
+        store.dispatch({ type: types.REQUEST_SUCCESS, data })
         const componentHTML = renderToString(
           <Provider store={store}>
             <RouterContext {...props} />
           </Provider>
-        );
+        )
 
-        const initialState = store.getState();
+        const initialState = store.getState()
 
         res.status(200).send(`
           <!doctype html>
@@ -119,14 +114,14 @@ export default function render(req, res) {
               <script type="text/javascript" charset="utf-8" src="/assets/app.js"></script>
             </body>
           </html>
-        `);
+        `)
       })
       .catch(err => {
-        console.error(err);
-        res.status(500).json(err);
-      });
+        console.error(err)
+        res.status(500).json(err)
+      })
     } else {
-      res.sendStatus(404);
+      res.sendStatus(404)
     }
-  });
+  })
 }

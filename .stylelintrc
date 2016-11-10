@@ -6,7 +6,6 @@
     "color-no-invalid-hex": true,
     "declaration-block-no-duplicate-properties": true,
     "declaration-block-trailing-semicolon": "always",
-    "declaration-block-semicolon-newline-after": "always",
     "block-closing-brace-newline-after": "always",
     "unit-whitelist": ["px", "em", "rem", "%", "s", "deg"]
   }

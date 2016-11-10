@@ -1,10 +1,7 @@
 /* eslint consistent-return: 0, no-else-return: 0*/
-import { polyfill } from 'es6-promise';
-import request from 'axios';
-import md5 from 'spark-md5';
-import * as types from 'types';
-
-polyfill();
+import request from 'axios'
+import md5 from 'spark-md5'
+import * as types from 'types'
 
 /*
  * Utility function to make AJAX requests using isomorphic fetch.
@@ -17,81 +14,80 @@ polyfill();
  * @param String endpoint
  * @return Promise
  */
-export function makeTopicRequest(method, id, data, api = '/topic') {
-  return request[method](api + (id ? ('/' + id) : ''), data);
+export function makeTopicRequest (method, id, data, api = '/topic') {
+  return request[method](api + (id ? ('/' + id) : ''), data)
 }
 
-export function increment(id) {
-  return { type: types.INCREMENT_COUNT, id };
+export function increment (id) {
+  return { type: types.INCREMENT_COUNT, id }
 }
 
-export function decrement(id) {
-  return { type: types.DECREMENT_COUNT, id };
+export function decrement (id) {
+  return { type: types.DECREMENT_COUNT, id }
 }
 
-export function destroy(id) {
-  return { type: types.DESTROY_TOPIC, id };
+export function destroy (id) {
+  return { type: types.DESTROY_TOPIC, id }
 }
 
-
-export function typing(text) {
+export function typing (text) {
   return {
     type: types.TYPING,
     newTopic: text
-  };
+  }
 }
 
 /*
  * @param data
  * @return a simple JS object
  */
-export function createTopicRequest(data) {
+export function createTopicRequest (data) {
   return {
     type: types.CREATE_TOPIC_REQUEST,
     id: data.id,
     count: data.count,
     text: data.text
-  };
+  }
 }
 
-export function createTopicSuccess() {
+export function createTopicSuccess () {
   return {
     type: types.CREATE_TOPIC_SUCCESS
-  };
+  }
 }
 
-export function createTopicFailure(data) {
+export function createTopicFailure (data) {
   return {
     type: types.CREATE_TOPIC_FAILURE,
     id: data.id,
     error: data.error
-  };
+  }
 }
 
-export function createTopicDuplicate() {
+export function createTopicDuplicate () {
   return {
     type: types.CREATE_TOPIC_DUPLICATE
-  };
+  }
 }
 
 // This action creator returns a function,
 // which will get executed by Redux-Thunk middleware
 // This function does not need to be pure, and thus allowed
 // to have side effects, including executing asynchronous API calls.
-export function createTopic(text) {
+export function createTopic (text) {
   return (dispatch, getState) => {
     // If the text box is empty
-    if (text.trim().length <= 0) return;
+    if (text.trim().length <= 0) return
 
-    const id = md5.hash(text);
+    const id = md5.hash(text)
     // Redux thunk's middleware receives the store methods `dispatch`
     // and `getState` as parameters
-    const { topic } = getState();
+    const { topic } = getState()
     const data = {
       count: 1,
       id,
       text
-    };
+    }
 
     // Conditional dispatch
     // If the topic already exists, make sure we emit a dispatch event
@@ -99,11 +95,11 @@ export function createTopic(text) {
       // Currently there is no reducer that changes state for this
       // For production you would ideally have a message reducer that
       // notifies the user of a duplicate topic
-      return dispatch(createTopicDuplicate());
+      return dispatch(createTopicDuplicate())
     }
 
     // First dispatch an optimistic update
-    dispatch(createTopicRequest(data));
+    dispatch(createTopicRequest(data))
 
     return makeTopicRequest('post', id, data)
       .then(res => {
@@ -112,51 +108,50 @@ export function createTopic(text) {
           // on success, but I've opted to leave that out
           // since we already did an optimistic update
           // We could return res.json();
-          return dispatch(createTopicSuccess());
+          return dispatch(createTopicSuccess())
         }
       })
       .catch(() => {
-        return dispatch(createTopicFailure({ id, error: 'Oops! Something went wrong and we couldn\'t create your topic'}));
-      });
-  };
+        return dispatch(createTopicFailure({ id, error: 'Oops! Something went wrong and we couldn\'t create your topic'}))
+      })
+  }
 }
 
 // Fetch posts logic
-export function fetchTopics() {
+export function fetchTopics () {
   return {
     type: types.GET_TOPICS,
     promise: makeTopicRequest('get')
-  };
+  }
 }
 
-
-export function incrementCount(id) {
+export function incrementCount (id) {
   return dispatch => {
     return makeTopicRequest('put', id, {
         isFull: false,
         isIncrement: true
       })
       .then(() => dispatch(increment(id)))
-      .catch(() => dispatch(createTopicFailure({id, error: 'Oops! Something went wrong and we couldn\'t add your vote'})));
-  };
+      .catch(() => dispatch(createTopicFailure({id, error: 'Oops! Something went wrong and we couldn\'t add your vote'})))
+  }
 }
 
-export function decrementCount(id) {
+export function decrementCount (id) {
   return dispatch => {
     return makeTopicRequest('put', id, {
         isFull: false,
         isIncrement: false
       })
       .then(() => dispatch(decrement(id)))
-      .catch(() => dispatch(createTopicFailure({id, error: 'Oops! Something went wrong and we couldn\'t add your vote'})));
-  };
+      .catch(() => dispatch(createTopicFailure({id, error: 'Oops! Something went wrong and we couldn\'t add your vote'})))
+  }
 }
 
-export function destroyTopic(id) {
+export function destroyTopic (id) {
   return dispatch => {
     return makeTopicRequest('delete', id)
       .then(() => dispatch(destroy(id)))
       .catch(() => dispatch(createTopicFailure({id,
-        error: 'Oops! Something went wrong and we couldn\'t add your vote'})));
-  };
+        error: 'Oops! Something went wrong and we couldn\'t add your vote'})))
+  }
 }

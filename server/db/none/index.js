@@ -1,3 +1,3 @@
-export function connect() {}
+export function connect () {}
 
-export default { connect };
+export default { connect }

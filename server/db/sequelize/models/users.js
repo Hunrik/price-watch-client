@@ -1,17 +1,17 @@
-import Promise from 'bluebird';
-import bcryptNode from 'bcrypt-nodejs';
-const bcrypt = Promise.promisifyAll(bcryptNode);
+import Promise from 'bluebird'
+import bcryptNode from 'bcrypt-nodejs'
+const bcrypt = Promise.promisifyAll(bcryptNode)
 
 // Other oauthtypes to be added
 
 /* eslint-disable no-param-reassign */
-function hashPassword(user) {
-  if (!user.changed('password')) return null;
+function hashPassword (user) {
+  if (!user.changed('password')) return null
   return bcrypt.genSaltAsync(5).then((salt) =>
     bcrypt.hashAsync(user.password, salt, null).then((hash) => {
-      user.password = hash;
+      user.password = hash
     })
-  );
+  )
 }
 /* eslint-enable no-param-reassign */
 
@@ -60,19 +60,19 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
 
     classMethods: {
-      associate(models) {
+      associate (models) {
         User.hasMany(models.Token, {
           foreignKey: 'userId'
-        });
+        })
       }
     },
 
     instanceMethods: {
-      comparePassword(candidatePassword) {
-        return bcrypt.compareAsync(candidatePassword, this.password);
+      comparePassword (candidatePassword) {
+        return bcrypt.compareAsync(candidatePassword, this.password)
       },
 
-      toJSON() {
+      toJSON () {
         return {
           id: this.id,
           email: this.email,
@@ -83,13 +83,13 @@ module.exports = (sequelize, DataTypes) => {
             website: this.website,
             picture: this.picture
           }
-        };
+        }
       }
     }
-  });
+  })
 
-  User.beforeCreate(hashPassword);
-  User.beforeUpdate(hashPassword);
+  User.beforeCreate(hashPassword)
+  User.beforeUpdate(hashPassword)
 
-  return User;
-};
+  return User
+}

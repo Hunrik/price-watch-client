@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux';
-import * as types from 'types';
+import { combineReducers } from 'redux'
+import * as types from 'types'
 
 const topic = (
   state = {},
@@ -11,21 +11,21 @@ const topic = (
         id: action.id,
         count: action.count,
         text: action.text
-      };
+      }
     case types.INCREMENT_COUNT:
       if (state.id === action.id) {
-        return { ...state, count: state.count + 1 };
+        return { ...state, count: state.count + 1 }
       }
-      return state;
+      return state
     case types.DECREMENT_COUNT:
       if (state.id === action.id) {
-        return { ...state, count: state.count - 1 };
+        return { ...state, count: state.count - 1 }
       }
-      return state;
+      return state
     default:
-      return state;
+      return state
   }
-};
+}
 
 const topics = (
   state = [],
@@ -33,21 +33,21 @@ const topics = (
 ) => {
   switch (action.type) {
     case types.REQUEST_SUCCESS:
-      if (action.data) return action.data;
-      return state;
+      if (action.data) return action.data
+      return state
     case types.CREATE_TOPIC_REQUEST:
-      return [...state, topic(undefined, action)];
+      return [...state, topic(undefined, action)]
     case types.CREATE_TOPIC_FAILURE:
-      return state.filter(t => t.id !== action.id);
+      return state.filter(t => t.id !== action.id)
     case types.DESTROY_TOPIC:
-      return state.filter(t => t.id !== action.id);
+      return state.filter(t => t.id !== action.id)
     case types.INCREMENT_COUNT:
     case types.DECREMENT_COUNT:
-      return state.map(t => topic(t, action));
+      return state.map(t => topic(t, action))
     default:
-      return state;
+      return state
   }
-};
+}
 
 const newTopic = (
   state = '',
@@ -55,17 +55,17 @@ const newTopic = (
 ) => {
   switch (action.type) {
     case types.TYPING:
-      return action.newTopic;
+      return action.newTopic
     case types.CREATE_TOPIC_REQUEST:
-      return '';
+      return ''
     default:
-      return state;
+      return state
   }
-};
+}
 
 const topicReducer = combineReducers({
   topics,
   newTopic
-});
+})
 
-export default topicReducer;
+export default topicReducer

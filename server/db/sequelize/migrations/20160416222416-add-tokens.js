@@ -1,5 +1,5 @@
 module.exports = {
-  up(queryInterface, DataTypes) {
+  up (queryInterface, DataTypes) {
     return queryInterface.createTable(
       'Tokens', {
         id: {
@@ -23,10 +23,10 @@ module.exports = {
           }
         }
       }
-    );
+    )
   },
 
-  down(queryInterface) {
-    return queryInterface.dropTable('Tokens');
+  down (queryInterface) {
+    return queryInterface.dropTable('Tokens')
   }
-};
+}

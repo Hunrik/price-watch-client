@@ -1,9 +1,9 @@
 /* Initializing passport.js */
-import passport from 'passport';
-import local from './passport/local';
-import google from './passport/google';
-import { passport as dbPassport } from '../db';
-import unsupportedMessage from '../db/unsupportedMessage';
+import passport from 'passport'
+import local from './passport/local'
+import google from './passport/google'
+import { passport as dbPassport } from '../db'
+import unsupportedMessage from '../db/unsupportedMessage'
 
 export default () => {
   // Configure Passport authenticated session persistence.
@@ -16,15 +16,15 @@ export default () => {
 
   if (dbPassport && dbPassport.deserializeUser) {
     passport.serializeUser((user, done) => {
-      done(null, user.id);
-    });
+      done(null, user.id)
+    })
 
-    passport.deserializeUser(dbPassport.deserializeUser);
+    passport.deserializeUser(dbPassport.deserializeUser)
   } else {
-    console.warn(unsupportedMessage('(de)serialize User'));
+    console.warn(unsupportedMessage('(de)serialize User'))
   }
 
   // use the following strategies
-  local(passport);
-  google(passport);
-};
+  local(passport)
+  google(passport)
+}

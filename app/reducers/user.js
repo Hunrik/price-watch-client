@@ -1,5 +1,5 @@
-import * as types from 'types';
-import { combineReducers } from 'redux';
+import * as types from 'types'
+import { combineReducers } from 'redux'
 
 const isLogin = (
   state = true,
@@ -7,11 +7,11 @@ const isLogin = (
 ) => {
   switch (action.type) {
     case types.TOGGLE_LOGIN_MODE:
-      return !state;
+      return !state
     default:
-      return state;
+      return state
   }
-};
+}
 
 const message = (
   state = '',
@@ -24,14 +24,14 @@ const message = (
     case types.LOGOUT_USER:
     case types.LOGIN_SUCCESS_USER:
     case types.SIGNUP_SUCCESS_USER:
-      return '';
+      return ''
     case types.LOGIN_ERROR_USER:
     case types.SIGNUP_ERROR_USER:
-      return action.message;
+      return action.message
     default:
-      return state;
+      return state
   }
-};
+}
 
 const isWaiting = (
   state = false,
@@ -41,18 +41,18 @@ const isWaiting = (
     case types.MANUAL_LOGIN_USER:
     case types.SIGNUP_USER:
     case types.LOGOUT_USER:
-      return true;
+      return true
     case types.LOGIN_SUCCESS_USER:
     case types.SIGNUP_SUCCESS_USER:
     case types.LOGOUT_SUCCESS_USER:
     case types.LOGIN_ERROR_USER:
     case types.SIGNUP_ERROR_USER:
     case types.LOGOUT_ERROR_USER:
-      return false;
+      return false
     default:
-      return state;
+      return state
   }
-};
+}
 
 const authenticated = (
   state = false,
@@ -62,21 +62,21 @@ const authenticated = (
     case types.LOGIN_SUCCESS_USER:
     case types.SIGNUP_SUCCESS_USER:
     case types.LOGOUT_ERROR_USER:
-      return true;
+      return true
     case types.LOGIN_ERROR_USER:
     case types.SIGNUP_ERROR_USER:
     case types.LOGOUT_SUCCESS_USER:
-      return false;
+      return false
     default:
-      return state;
+      return state
   }
-};
+}
 
 const userReducer = combineReducers({
   isLogin,
   isWaiting,
   authenticated,
   message
-});
+})
 
-export default userReducer;
+export default userReducer

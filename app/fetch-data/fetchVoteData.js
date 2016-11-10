@@ -1,9 +1,9 @@
-import { voteService } from 'services';
+import { voteService } from 'services'
 
 const fetchData = () => {
   return voteService.getTopics()
-          .then(res => res.data);
-};
+          .then(res => res.data)
+}
 
-export default fetchData;
+export default fetchData
 

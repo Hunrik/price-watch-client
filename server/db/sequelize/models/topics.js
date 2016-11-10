@@ -17,4 +17,4 @@ export default (sequelize, DataTypes) =>
     }
   }, {
     timestamps: false
-  });
+  })

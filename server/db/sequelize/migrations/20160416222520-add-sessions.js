@@ -1,5 +1,5 @@
 module.exports = {
-  up(queryInterface, DataTypes) {
+  up (queryInterface, DataTypes) {
     return queryInterface.createTable(
       'session', {
         sid: {
@@ -13,10 +13,10 @@ module.exports = {
           type: DataTypes.DATE
         }
       }
-    );
+    )
   },
 
-  down(queryInterface) {
-    return queryInterface.dropTable('session');
+  down (queryInterface) {
+    return queryInterface.dropTable('session')
   }
-};
+}

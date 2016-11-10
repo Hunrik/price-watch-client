@@ -1,8 +1,8 @@
-import session from 'express-session';
-import connectMongo from 'connect-mongo';
-import { db } from './constants';
+import session from 'express-session'
+import connectMongo from 'connect-mongo'
+import { db } from './constants'
 
-const MongoStore = connectMongo(session);
+const MongoStore = connectMongo(session)
 
 export default () =>
   new MongoStore(
@@ -10,4 +10,4 @@ export default () =>
       url: db,
       autoReconnect: true
     }
-  );
+  )

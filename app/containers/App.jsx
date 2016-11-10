@@ -1,11 +1,10 @@
-import React, { PropTypes } from 'react';
-import Navigation from 'containers/Navigation';
-import Message from 'containers/Message';
-import classNames from 'classnames/bind';
-import styles from 'css/main';
+import React, { PropTypes } from 'react'
+import Header from 'components/Header'
+import classNames from 'classnames/bind'
+import styles from 'css/main'
+import { Container } from 'semantic-ui-react'
 
-const cx = classNames.bind(styles);
-
+const cx = classNames.bind(styles)
 
 /*
  * React-router's <Router> component renders <Route>'s
@@ -19,15 +18,16 @@ const cx = classNames.bind(styles);
 const App = ({children}) => {
   return (
     <div className={cx('app')}>
-      <Navigation />
-      <Message />
+      <Header />
+      <Container>
         {children}
+      </Container>
     </div>
-  );
-};
+  )
+}
 
 App.propTypes = {
   children: PropTypes.object
-};
+}
 
-export default App;
+export default App

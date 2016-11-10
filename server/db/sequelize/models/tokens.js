@@ -19,13 +19,13 @@ export default (sequelize, DataTypes) => {
     timestamps: false,
 
     classMethods: {
-      associate(models) {
+      associate (models) {
         Token.belongsTo(models.User, {
           foreignKey: 'userId'
-        });
+        })
       }
     }
-  });
+  })
 
-  return Token;
-};
+  return Token
+}

@@ -10,10 +10,10 @@
  */
 
 // Import all your needed files first (webpack will grab the url)
-import chromecon from 'images/chrome-ninja192-precomposed.png';
-import applecon from 'images/apple-ninja152-precomposed.png';
-import mscon from 'images/ms-ninja144-precomposed.png';
-import favicon from 'images/favicon.png';
+import chromecon from 'images/chrome-ninja192-precomposed.png'
+import applecon from 'images/apple-ninja152-precomposed.png'
+import mscon from 'images/ms-ninja144-precomposed.png'
+import favicon from 'images/favicon.png'
 
 const config = {
   link: [
@@ -23,7 +23,8 @@ const config = {
     // Add to homescreen for Safari on IOS
     { rel: 'apple-touch-icon', sizes: '152x152', applecon },
     { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto+Condensed', type: 'text/css' },
-    { rel: 'stylesheet', href: '/assets/styles/main.css' }
+    { rel: 'stylesheet', href: '/semantic-ui/semantic.min.css' }
+    // { rel: 'stylesheet', href: '/assets/styles/main.css' }
     // SEO: If your mobile URL is different from the desktop URL,
     // add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones
     // { 'rel': 'canonical', 'href': 'http://www.example.com/' }
@@ -48,6 +49,6 @@ const config = {
     { name: 'msapplication-TileImage', content: mscon },
     { name: 'msapplication-TileColor', content: '#3372DF' }
   ]
-};
+}
 
-export default config;
+export default config

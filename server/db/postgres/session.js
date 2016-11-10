@@ -1,9 +1,9 @@
-import session from 'express-session';
-import pg from 'pg';
-import connectPostgres from 'connect-pg-simple';
-import { db } from '../sequelize/constants';
+import session from 'express-session'
+import pg from 'pg'
+import connectPostgres from 'connect-pg-simple'
+import { db } from '../sequelize/constants'
 
-const PGStore = connectPostgres(session);
+const PGStore = connectPostgres(session)
 
 export default () =>
   new PGStore(
@@ -11,4 +11,4 @@ export default () =>
       pg,
       conString: db
     }
-  );
+  )

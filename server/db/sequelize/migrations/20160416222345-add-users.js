@@ -1,5 +1,5 @@
 module.exports = {
-  up(queryInterface, DataTypes) {
+  up (queryInterface, DataTypes) {
     return queryInterface.createTable(
       'Users', {
         id: {
@@ -50,10 +50,10 @@ module.exports = {
           indicesType: 'unique'
         }
       )
-    );
+    )
   },
 
-  down(queryInterface) {
-    return queryInterface.dropTable('Users');
+  down (queryInterface) {
+    return queryInterface.dropTable('Users')
   }
-};
+}
