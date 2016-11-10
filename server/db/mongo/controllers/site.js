@@ -101,7 +101,7 @@ export const createSite = async function ({body}, res) {
 /**
  * Add site to parsing queue
  */
-export const parseSite = async function (req, res) {
+/*export const parseSite = async function (req, res) {
   const site = await Site.findById(req.params.id)
   const Mapper = new Sitemapper({
     url: site.sitemap,
@@ -136,7 +136,7 @@ export const parseSite = async function (req, res) {
   })
   //await product.find({domain: site.domain}).remove().exec()
   
-}
+}*/
 /**
  * Delete Site parsing queue
  */
