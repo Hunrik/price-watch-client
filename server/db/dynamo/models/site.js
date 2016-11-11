@@ -29,6 +29,10 @@ const SiteSchema = new dynamoose.Schema({
   productIdSelector: {
     type: [String]
   },
+  enabled: {
+    type: Boolean,
+    default: true
+  },
   addedAt: {
     type: Date,
     default: Date.now

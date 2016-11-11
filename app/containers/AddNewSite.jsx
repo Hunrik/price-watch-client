@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button, Segment, Form, Message } from 'semantic-ui-react'
+import { Button, Segment, Form, Message, Radio } from 'semantic-ui-react'
 import { Field, reduxForm } from 'redux-form'
 import { saveAndCloseNewSite } from '../reducers/home'
+import Checkbox from '../components/Checkbox'
 const validate = values => {
   const errors = {}
   if (!values.domain) {
@@ -13,6 +14,14 @@ const validate = values => {
   return errors
 }
 
+const renderRadio = ({ input, label, type, meta: { touched, error, warning } }) => {
+  return (
+    <Form.Field>
+      <label>{label}</label>
+      <Radio {...input} toggle />
+      {touched && (error && <Message error>{error}</Message>)}
+    </Form.Field>
+) }
 const renderField = ({ input, label, type, meta: { touched, error, warning } }) => {
   return (
     <Form.Field>
@@ -21,7 +30,6 @@ const renderField = ({ input, label, type, meta: { touched, error, warning } }) 
       {touched && (error && <Message error>{error}</Message>)}
     </Form.Field>
 ) }
-
 let AddNewSite = (props) => {
   const { handleSubmit, pristine, submitting } = props
 
@@ -41,8 +49,13 @@ let AddNewSite = (props) => {
           <Field name='priceSelector' type='text' component={renderField} label='Price selector' />
           <Field name='productPageSelector' type='text' component={renderField} label='Product page selector' />
         </Form.Group>
+        <div className='ui toggle checkbox'>
+          <Field name='enabled' component='input' type='checkbox' />
+          <label>Enable</label>
+        </div>
         <Button type='submit' disabled={pristine || submitting}>Save</Button>
       </Form>
+
     </Segment>
   )
 }

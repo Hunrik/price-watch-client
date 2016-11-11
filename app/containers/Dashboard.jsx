@@ -35,7 +35,7 @@ export class Home extends Component {
           {site.domainName}
           <Collapse isOpened={isOpen} className='siteRow'>
             <SiteForm 
-            form={site.domainName.toString()}          // formKey should be a string
+            form={site.domainName}          // formKey should be a string
             initialValues={site}
             onSubmit={(arg) => editSite(arg)} />
           </Collapse>

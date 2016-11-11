@@ -72,7 +72,7 @@ const setSites = (data) => {
 }
 export const editSite = data => {
   return (dispatch, getState) => {
-    const siteData = _.pick(data, 'domainName', 'productIdSelector', 'productNameSelector', 'priceSelector', 'productPageSelector', 'sitemap')
+    const siteData = _.pick(data, 'domainName', 'productIdSelector', 'productNameSelector', 'priceSelector', 'productPageSelector', 'sitemap', 'enabled')
     axios.put('sites', siteData).then(({data}) => {
       dispatch(saveNewSite(data))
     }).catch(console.log)

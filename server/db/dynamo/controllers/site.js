@@ -121,6 +121,7 @@ export const createSite = async function ({body}, res) {
   const siteKeys = {
     domainName: body.domainName,
     sitemap: body.sitemap,
+    enabled: body.enabled
   }
   let site = {
     productPageSelector: body.productPageSelector,
@@ -143,7 +144,7 @@ export const createSite = async function ({body}, res) {
 export const updateSite = async function ({body}, res) {
   console.log(body)
   if(!body.domainName) return res.status(400).send({status: 'Missing or invalid domain'})
-  let site = _.omit(body, 'domainName', 'sitemap')
+  let site = _.omit(body, 'domainName', 'sitemap', 'enabled')
   if(!site) return res.status(400).send({status: 'Empty parameters'})
   Object.keys(site).map(function(key, index) {
     if(typeof site[key] !== 'string') return

@@ -1,11 +1,18 @@
 import React, { PropTypes, Component } from 'react'
-import { Button, Checkbox, Form } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import { Field, reduxForm } from 'redux-form'
-type Props = {
-}
+import Checkbox from './Checkbox'
+const renderRadio = ({ input, label, type, onChange, meta: { touched, error, warning } }) => {
+  console.log(input.onChange)
+  return (
+    <Form.Field>
+      <label>{label}</label>
+      <Checkbox {...input} name={input.name} checked={input.checked} onChange={input.onChange} toggle />
+      {touched && (error && <Message error>{error}</Message>)}
+    </Form.Field>
+) }
 
 export class SiteForm extends Component {
-  props: Props
 
   render () {
     const {handleSubmit} = this.props
@@ -42,6 +49,10 @@ export class SiteForm extends Component {
             <Field placeholder='Product page selector' name='productPageSelector' component='input' />
           </Form.Field>
         </Form.Group>
+        <div className='ui toggle checkbox'>
+          <Field name='enabled' component='input' type='checkbox' />
+          <label>Enable</label>
+        </div>
         <Button type='submit'>Save</Button>
       </Form>
     )
