@@ -79,6 +79,7 @@ export const enqueProducts = async function (req, res) {
         console.log('Adding $(i)th time $(resp.length) ammout of data')
         i++
       } while (resp.length > 0)
+      sites = await shuffle(sites)
       console.log('Added: ', sites.length)
       let message = sites.map((site) => {
         let payload = {
@@ -117,15 +118,22 @@ export const enqueProducts = async function (req, res) {
  */
 export const createSite = async function ({body}, res) {
   if(!body.domainName) res.status(400).send({status: 'Missing or invalid domain'})
-  const site = {
+  const siteKeys = {
     domainName: body.domainName,
     sitemap: body.sitemap,
+  }
+  let site = {
     productPageSelector: body.productPageSelector,
     priceSelector: body.priceSelector,
     productNameSelector: body.productNameSelector,
     productIdSelector: body.productIdSelector
   }
-  const resp = await Site.default.create(site)
+  Object.keys(site).map(function(key, index) {
+    if(typeof site[key] !== 'string') return
+    site[key] = site[key].split(';')
+  })
+  const complete = Object.assign({}, site, siteKeys)
+  const resp = await Site.default.create(complete)
   res.send({status: 'saved'})
 }
 /**
@@ -215,4 +223,23 @@ export default {
   deleteSiteQueue,
   status,
   updateSite
+}
+
+function shuffle(array) {
+  return new Promise( (resolve, reject) => {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return resolve(array);
+  })
 }

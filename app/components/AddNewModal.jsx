@@ -32,7 +32,7 @@ let AddNewModal = (props) => {
       <Modal.Content>
         <Form onSubmit={handleSubmit}>
           <Form.Group widths='equal'>
-            <Field name='domain' type='text' component={renderField} label='Domain' />
+            <Field name='domainName' type='text' component={renderField} label='Domain' />
             <Field name='sitemap' type='text' component={renderField} label='Sitemap URL' />
           </Form.Group>
           <Form.Group widths='equal'>
