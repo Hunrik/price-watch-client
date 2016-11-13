@@ -3,7 +3,6 @@ import { Button, Form } from 'semantic-ui-react'
 import { Field, reduxForm } from 'redux-form'
 import Checkbox from './Checkbox'
 const renderRadio = ({ input, label, type, onChange, meta: { touched, error, warning } }) => {
-  console.log(input.onChange)
   return (
     <Form.Field>
       <label>{label}</label>

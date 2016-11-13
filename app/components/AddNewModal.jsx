@@ -14,7 +14,6 @@ const validate = values => {
 }
 
 const renderField = ({ input, label, type, meta: { touched, error, warning } }) => {
-  console.log(input)
   return (
     <Form.Field>
       <label>{label}</label>

@@ -5,7 +5,6 @@ import { getProducts } from '../reducers/products'
 class PriceList extends Component {
   render () {
     const { products, isLoading } = this.props
-    console.log(this.props)
     const rows = products.map((product, id) => {
       const newPrice = product.price ? product.price[product.price.length - 1] : 'N/A'
       const oldPrice = product.price ? product.price[product.price.length - 2] : 'N/A'
@@ -13,7 +12,7 @@ class PriceList extends Component {
       return (
         <Table.Row key={id} >
           <Table.Cell>{product.domainName}</Table.Cell>
-          <Table.Cell singleLine>{product.name}</Table.Cell>
+          <Table.Cell singleLine>{product.productName}</Table.Cell>
           <Table.Cell>{newPrice}</Table.Cell>
           <Table.Cell>{oldPrice}</Table.Cell>
           <Table.Cell>{percentage}%</Table.Cell>

@@ -10,7 +10,6 @@ export const startStatus = () => {
 }
 export const getStatus = (data) => {
   return _.throttle((dispatch, getState) => {
-    console.log('Getting status')
     axios.get('status').then(({data}) => {
       dispatch(setStatus(data))
     })

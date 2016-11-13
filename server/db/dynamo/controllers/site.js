@@ -15,13 +15,6 @@ const sqs = new AWS.SQS()
 Promise.promisifyAll(Object.getPrototypeOf(sqs))
 sqs.purgeQueue({QueueUrl: sqsUrl})
 
-try {
-  /*const URLqueue = Queue('urls', 6379, '127.0.0.1')
-  const productQueue = Queue('products', 6379, '127.0.0.1')*/
-} catch (e) {
-  console.log('Could not connect to redis')
-}
-
 export async function listSites (req, res) {
   const sites = await Site.list()
   return res.send(sites)
@@ -86,7 +79,6 @@ export const enqueProducts = async function (req, res) {
       } while (resp.lastKey)
 
       sites = await shuffle(sites)
-      console.log('Added: ', sites.length)
       let message = sites.map((site, i) => {
         let payload = {
           type: 'product',
@@ -99,14 +91,11 @@ export const enqueProducts = async function (req, res) {
         }
       })
       message = _.chunk(message, 10)
-      console.log(message.length)
-      var i = 0
       eachLimit(message, 50, (chunk, callback) => {
         const messages = {
           Entries: chunk,
           QueueUrl: sqsUrl
         }
-        console.log(`Adding ${i++}`)
         sqs.sendMessageBatchAsync(messages)
           .then(() => callback())
           .catch(console.log)
@@ -155,13 +144,11 @@ export const createSite = async function ({body}, res) {
  * PUT /sites
  */
 export const updateSite = async function ({body}, res) {
-  console.log(body)
   if(!body.domainName) return res.status(400).send({status: 'Missing or invalid domain'})
   let site = _.omit(body, 'domainName', 'sitemap', 'enabled')
   if(!site) return res.status(400).send({status: 'Empty parameters'})
   Object.keys(site).map(function(key, index) {
     if(typeof site[key] !== 'string') return
-    console.log(typeof site[key])
     site[key] = site[key].split(';')
   })
   site.enabled = body.enabled || false 
@@ -190,7 +177,6 @@ export const parseSite = async function (req, res) {
     }
   })
   sites = _.chunk(sites, 10)
-  console.log(sites.length)
   await Site.default.delete({domainName: site.domain})
   eachLimit(sites, 10, async function (chunk, callback) {
     try {
@@ -230,7 +216,6 @@ export const status = async function (req, res) {
 
 export const getProducts = async function (req, res) {
   const page = req.params
-  console.log(page)
   const products = await Product.list(100 * page, 100)
   return res.send(products)
 }
