@@ -82,10 +82,9 @@ export const findByDomain = (domain) => {
  * @param {number} limit - Limit number of Sites to be returned.
  * @returns {Promise<Site[]>}
  */
-export const list = ({ skip = 0, limit = 50 } = {}) => {
+export const list = () => {
   return new Promise((resolve, reject) => {
-    Site.scan().limit(limit)
-      .startAt(skip)
+    Site.scan()
       .exec()
       .then(resolve)
       .catch(reject)

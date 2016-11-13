@@ -7,6 +7,7 @@ import * as Product from '../models/product'
 import Promise from 'bluebird'
 import AWS from 'aws-sdk'
 import eachLimit from 'async/eachLimit'
+import axios from 'axios'
 const sqsUrl = 'https://sqs.eu-central-1.amazonaws.com/284590800778/Parser'
 AWS.config.loadFromPath('./config.json')
 
@@ -58,6 +59,9 @@ export const parseSitemap = async function (req, res) {
           .then(callback)
           .catch(console.log)
       }, () => {
+        axios.get('https://mjl05xiv1a.execute-api.eu-central-1.amazonaws.com/prod/shop-parser-production', {
+          headers: {'x-api-key': '8XGbYeQwSqa5TwanMAJP6QMH1Ix0Yrj6ax5vQoW8'}
+        })
         return res.send(data.sites.length + ' site sent for processing!')
       })
     } catch (e) {
@@ -72,16 +76,18 @@ export const parseSitemap = async function (req, res) {
 export const enqueProducts = async function (req, res) {
     try {
       let i = 0
-      let sites = []
+      var sites = await Product.default.scan().exec()
+      var lastElem = sites.lastKey
+      var resp = []
       do {
-        const resp = await Product.list(i * 100, 100)
+        resp = await Product.list(lastElem)
+        lastElem = resp.lastKey
         sites.push(resp)
-        console.log('Adding $(i)th time $(resp.length) ammout of data')
-        i++
-      } while (resp.length > 0)
+      } while (resp.lastKey)
+
       sites = await shuffle(sites)
       console.log('Added: ', sites.length)
-      let message = sites.map((site) => {
+      let message = sites.map((site, i) => {
         let payload = {
           type: 'product',
           data: site
@@ -94,17 +100,24 @@ export const enqueProducts = async function (req, res) {
       })
       message = _.chunk(message, 10)
       console.log(message.length)
-      eachLimit(message, 10, (chunk, callback) => {
+      var i = 0
+      eachLimit(message, 50, (chunk, callback) => {
         const messages = {
           Entries: chunk,
           QueueUrl: sqsUrl
         }
+        console.log(`Adding ${i++}`)
         sqs.sendMessageBatchAsync(messages)
-          .then(callback)
+          .then(() => callback())
           .catch(console.log)
-      }, () => {
-        return res.send({
-          itemsAdded: sites.length
+      }, (err) => {
+        axios.get('https://mjl05xiv1a.execute-api.eu-central-1.amazonaws.com/prod/shop-parser-production', {
+          headers: {'x-api-key': '8XGbYeQwSqa5TwanMAJP6QMH1Ix0Yrj6ax5vQoW8'}
+        })
+        .then(() => {
+          return res.send({
+            itemsAdded: sites.length
+          })
         })
       })
     } catch (e) {
@@ -178,6 +191,7 @@ export const parseSite = async function (req, res) {
   })
   sites = _.chunk(sites, 10)
   console.log(sites.length)
+  await Site.default.delete({domainName: site.domain})
   eachLimit(sites, 10, async function (chunk, callback) {
     try {
         const messages = {
@@ -190,7 +204,6 @@ export const parseSite = async function (req, res) {
   },() => {
     return res.status(200).send({status: data.sites.length + ' site added to the processing queue!'})
   })
-  //await product.find({domain: site.domain}).remove().exec()
   
 }
 /**
