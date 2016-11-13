@@ -8,7 +8,7 @@ class PriceList extends Component {
     const rows = products.map((product, id) => {
       const newPrice = product.price ? product.price[product.price.length - 1] : 'N/A'
       const oldPrice = product.price ? product.price[product.price.length - 2] : 'N/A'
-      const percentage = typeof oldPrice !== 'string' ? 100 - (newPrice / oldPrice * 100) : '0'
+      const percentage = typeof oldPrice === 'number' ? 100 - (newPrice / oldPrice * 100) : '0'
       return (
         <Table.Row key={id} >
           <Table.Cell>{product.domainName}</Table.Cell>

@@ -216,7 +216,7 @@ export const status = async function (req, res) {
 
 export const getProducts = async function (req, res) {
   const page = req.params
-  const products = await Product.list(100 * page, 100)
+  const products = await Product.getTopProducts(100)
   return res.send(products)
 }
 export default {

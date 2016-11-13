@@ -101,10 +101,18 @@ export const findByUrl = (url) => {
       .catch(reject)
   })
 }
-export const list = (skip = 0, limit = 50) => {
+export const list = (skip) => {
   return new Promise((resolve, reject) => {
     Product.scan()
       .startAt(skip)
+      .exec()
+      .then(resolve)
+      .catch(reject)
+  })
+}
+export const getTopProducts = (limit) => {
+  return new Promise((resolve, reject) => {
+    Product.scan().limit()
       .exec()
       .then(resolve)
       .catch(reject)
