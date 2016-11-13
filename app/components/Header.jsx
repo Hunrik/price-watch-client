@@ -7,6 +7,7 @@ export const Header = () => (
     <Menu.Item as={IndexLink} to='/' name='home' />
     <Menu.Item as={Link} to='/Dashboard' name='Dashboard' />
     <Menu.Item as={Link} to='/new' name='Add new' />
+    <Menu.Item as={Link} to='/pricelist' name='Price list' />
     <Menu.Menu position='right'>
       <Menu.Item as={Link} to='/logout' name='logout' />
     </Menu.Menu>

@@ -73,7 +73,7 @@ export default (app) => {
       httpOnly: true,
       secure: false
     },
-    store: new DynamoDBStore({AWSConfigJSON: dynamodb})
+    //store: new DynamoDBStore({AWSConfigJSON: dynamodb})
   }
 
   console.log('--------------------------')

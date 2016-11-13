@@ -151,6 +151,7 @@ export const updateSite = async function ({body}, res) {
     console.log(typeof site[key])
     site[key] = site[key].split(';')
   })
+  site.enabled = body.enabled || false 
   const resp = await Site.default.update({domainName: body.domainName}, site)
   res.send({status: 'saved'})
 }
@@ -214,6 +215,12 @@ export const status = async function (req, res) {
   return res.send(status)
 }
 
+export const getProducts = async function (req, res) {
+  const page = req.params
+  console.log(page)
+  const products = await Product.list(100 * page, 100)
+  return res.send(products)
+}
 export default {
   listSites,
   parseSitemap,
@@ -223,7 +230,8 @@ export default {
   deleteProductQueue,
   deleteSiteQueue,
   status,
-  updateSite
+  updateSite,
+  getProducts
 }
 
 function shuffle(array) {

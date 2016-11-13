@@ -8,6 +8,7 @@ import About from 'containers/About'
 import LoginOrRegister from 'containers/LoginOrRegister'
 import Dashboard from 'containers/Dashboard'
 import Home from 'containers/Home'
+import PriceList from 'containers/PriceList'
 import AddNewSite from 'containers/AddNewSite'
 /*
  * @param {Redux Store}
@@ -41,7 +42,7 @@ export default (store) => {
       <Route path='login' component={LoginOrRegister} onEnter={redirectAuth} />
       <Route path='dashboard' component={Dashboard} /*onEnter={requireAuth}*/ />
       <Route path='new' component={AddNewSite} />
-      <Route path='about' component={About} />
+      <Route path='/pricelist' component={PriceList} />
     </Route>
   )
 }

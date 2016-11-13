@@ -62,6 +62,7 @@ export default (app) => {
     app.put('/sites', siteController.updateSite)
     app.get('/status', siteController.status)
 
+    app.get('/products', siteController.getProducts)
     app.delete('/queue/site', siteController.deleteSiteQueue)
     app.delete('/queue/product', siteController.deleteProductQueue)
   } else {

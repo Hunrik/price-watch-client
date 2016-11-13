@@ -7,6 +7,7 @@ import statistics from 'reducers/statistics'
 import { routerReducer as routing } from 'react-router-redux'
 import * as types from 'types'
 import { reducer as formReducer } from 'redux-form'
+import products from 'reducers/products'
 const isFetching = (state = false, action) => {
   switch (action.type) {
     case types.CREATE_REQUEST:
@@ -29,7 +30,8 @@ const rootReducer = combineReducers({
   routing,
   home,
   statistics,
-  form: formReducer
+  form: formReducer,
+  products
 })
 
 export default rootReducer
