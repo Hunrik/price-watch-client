@@ -16,6 +16,7 @@ class PriceList extends Component {
           <Table.Cell>{newPrice}</Table.Cell>
           <Table.Cell>{oldPrice}</Table.Cell>
           <Table.Cell>{percentage}%</Table.Cell>
+          <Table.Cell>{product.updatedAt}%</Table.Cell>
           <Table.Cell><a href={product.url}>Link</a></Table.Cell>
         </Table.Row>)
     })
@@ -30,6 +31,7 @@ class PriceList extends Component {
               <Table.HeaderCell>New Price</Table.HeaderCell>
               <Table.HeaderCell>Old Price</Table.HeaderCell>
               <Table.HeaderCell>Difference</Table.HeaderCell>
+              <Table.HeaderCell>Updated at</Table.HeaderCell>
               <Table.HeaderCell>Link</Table.HeaderCell>
             </Table.Row>
           </Table.Header>

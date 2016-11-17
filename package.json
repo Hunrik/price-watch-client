@@ -100,6 +100,7 @@
     "json-loader": "^0.5.4",
     "lodash": "^4.16.2",
     "method-override": "^2.3.5",
+    "node-cache": "^4.1.0",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",

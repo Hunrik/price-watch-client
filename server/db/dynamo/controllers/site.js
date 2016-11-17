@@ -16,8 +16,9 @@ Promise.promisifyAll(Object.getPrototypeOf(sqs))
 sqs.purgeQueue({QueueUrl: sqsUrl})
 
 export async function listSites (req, res) {
+  console.log('Requesting')
   const sites = await Site.list()
-  return res.send(sites)
+  return res.send(sites || [])
 }
 /**
  * Parse sitemap
@@ -52,9 +53,7 @@ export const parseSitemap = async function (req, res) {
           .then(callback)
           .catch(console.log)
       }, () => {
-        axios.get('https://mjl05xiv1a.execute-api.eu-central-1.amazonaws.com/prod/shop-parser-production', {
-          headers: {'x-api-key': '8XGbYeQwSqa5TwanMAJP6QMH1Ix0Yrj6ax5vQoW8'}
-        })
+        invokeLambda()
         return res.send(data.sites.length + ' site sent for processing!')
       })
     } catch (e) {
@@ -91,7 +90,7 @@ export const enqueProducts = async function (req, res) {
         }
       })
       message = _.chunk(message, 10)
-      eachLimit(message, 50, (chunk, callback) => {
+      eachLimit(message, 20, (chunk, callback) => {
         const messages = {
           Entries: chunk,
           QueueUrl: sqsUrl
@@ -100,14 +99,12 @@ export const enqueProducts = async function (req, res) {
           .then(() => callback())
           .catch(console.log)
       }, (err) => {
-        axios.get('https://mjl05xiv1a.execute-api.eu-central-1.amazonaws.com/prod/shop-parser-production', {
-          headers: {'x-api-key': '8XGbYeQwSqa5TwanMAJP6QMH1Ix0Yrj6ax5vQoW8'}
-        })
+        invokeLambda()
         .then(() => {
           return res.send({
             itemsAdded: sites.length
           })
-        })
+        }).catch((e) => console.log(e))
       })
     } catch (e) {
       console.log(e)
@@ -165,6 +162,8 @@ export const parseSite = async function (req, res) {
     timeout: 15000 // 15 seconds 
   })
   const data = await Mapper.fetch()
+  console.log(data)
+  console.log(data.sites.length)
   let sites = data.sites.map((url, i) => {
     let payload = {
       type: 'page',
@@ -217,6 +216,7 @@ export const status = async function (req, res) {
 export const getProducts = async function (req, res) {
   const page = req.params
   const products = await Product.getTopProducts(100)
+  console.log(products.length)
   return res.send(products)
 }
 export default {
@@ -249,4 +249,10 @@ function shuffle(array) {
     }
     return resolve(array);
   })
+}
+
+const invokeLambda = () => {
+  return axios.get('https://mjl05xiv1a.execute-api.eu-central-1.amazonaws.com/prod/shop-parser-production', {
+          headers: {'x-api-key': '8XGbYeQwSqa5TwanMAJP6QMH1Ix0Yrj6ax5vQoW8'}
+        }).then(console.log).catch(console.error)
 }

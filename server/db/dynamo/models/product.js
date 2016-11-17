@@ -1,6 +1,7 @@
 import Promise from 'bluebird'
 import dynamoose from 'dynamoose'
-
+import NodeCache from 'node-cache'
+const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 })
 /**
  * Site Schema
  */
@@ -16,14 +17,13 @@ const ProductSchema = new dynamoose.Schema({
     hashKey: true
   },
   productId: {
-    type: Number,
-    index: true
+    type: Number
   },
   productName: {
     type: String
   },
   price: {
-    type: [Number]
+    type: Array
   },
   createdAt: {
     type: Date,
@@ -110,13 +110,16 @@ export const list = (skip) => {
       .catch(reject)
   })
 }
-export const getTopProducts = (limit) => {
-  return new Promise((resolve, reject) => {
-    Product.scan().limit()
-      .exec()
-      .then(resolve)
-      .catch(reject)
-  })
+export const getTopProducts = async function (limit) {
+    try {
+      const cached = await cache.get('topProdcts')
+      if (cached === undefined) {
+        const sites = await Product.scan().limit(limit).exec()
+        cache.set('topProdcts', sites)
+        return sites
+      }
+      return cached
+    } catch (e) { throw new Error(e) }
 }
 /**
  * @typedef Site
