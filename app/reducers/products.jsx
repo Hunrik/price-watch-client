@@ -23,16 +23,7 @@ const setproduct = (data) => {
 
 const ACTION_HANDLERS = {
   [SET_PRODUCT]: (state, {data}) => {
-    const products = data.map((elem) => {
-      let product = elem
-      product.newPrice = elem.price ? elem.price[elem.price.length - 1] : 'N/A'
-      product.oldPrice = elem.price ? elem.price[elem.price.length - 2] : 'N/A'
-      product.percentage = typeof oldPrice === 'number' ? 100 - (product.newPrice / product.oldPrice * 100) : '0'
-      return product
-    }).sort((a, b) => {
-      return b - a
-    })
-    return Object.assign({}, state, { products: products }, { isLoading: false })
+    return Object.assign({}, state, { products: data }, { isLoading: false })
   }
 }
 

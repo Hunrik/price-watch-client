@@ -4,10 +4,12 @@ import URL from 'url'
 import _ from 'lodash'
 import * as Site from '../models/site'
 import * as Product from '../models/product'
+import Diff from '../models/diff'
 import Promise from 'bluebird'
 import AWS from 'aws-sdk'
 import eachLimit from 'async/eachLimit'
 import axios from 'axios'
+import crawlmap from 'crawlmap'
 const sqsUrl = 'https://sqs.eu-central-1.amazonaws.com/284590800778/Parser'
 AWS.config.loadFromPath('./config.json')
 
@@ -27,12 +29,12 @@ export const parseSitemap = async function (req, res) {
     if (req.body.url === undefined) return res.status(422).send('Missing URL parameter')
     try {
       const site = await Site.findByDomain(req.body.url)
-      const Google = new Sitemapper({
-        url: site.sitemap,
-        timeout: 15000 // 15 seconds 
+      const crawler = new crawlmap({
+        sitemap: site.sitemap,
       })
-      const data = await Google.fetch()
-      data.sites.map((url) => {
+      const data = await crawler.crawl()
+      console.log('Crawled', data.length)
+      data.map((url) => {
         let payload = {
           type: 'page',
           data: site
@@ -67,18 +69,9 @@ export const parseSitemap = async function (req, res) {
  */
 export const enqueProducts = async function (req, res) {
     try {
-      let i = 0
-      var sites = await Product.default.scan().exec()
-      var lastElem = sites.lastKey
-      var resp = []
-      do {
-        resp = await Product.list(lastElem)
-        lastElem = resp.lastKey
-        sites.push(resp)
-      } while (resp.lastKey)
-
-      sites = await shuffle(sites)
-      let message = sites.map((site, i) => {
+      let resp = await Product.getAllProducts()
+      resp = await shuffle(resp)
+      let message = resp.map((site, i) => {
         let payload = {
           type: 'product',
           data: site
@@ -90,15 +83,7 @@ export const enqueProducts = async function (req, res) {
         }
       })
       message = _.chunk(message, 10)
-      eachLimit(message, 20, (chunk, callback) => {
-        const messages = {
-          Entries: chunk,
-          QueueUrl: sqsUrl
-        }
-        sqs.sendMessageBatchAsync(messages)
-          .then(() => callback())
-          .catch(console.log)
-      }, (err) => {
+      eachLimit(message, 25, pushToLambda, (err) => {
         invokeLambda()
         .then(() => {
           return res.send({
@@ -157,17 +142,16 @@ export const updateSite = async function ({body}, res) {
  */
 export const parseSite = async function (req, res) {
   const site = await Site.findByDomain(req.params.id)
-  const Mapper = new Sitemapper({
-    url: site.sitemap,
-    timeout: 15000 // 15 seconds 
-  })
-  const data = await Mapper.fetch()
-  console.log(data)
-  console.log(data.sites.length)
-  let sites = data.sites.map((url, i) => {
+  const crawler = new crawlmap({
+      url: 'asd',
+        sitemap: site.sitemap,
+      })
+  const data = await crawler.crawl()
+  console.log('Crawled', data.length)
+  let sites = data.map((url, i) => {
     let payload = {
       type: 'page',
-      data: url
+      data: (typeof url === 'array' ? url[0] : url)
     }
     return {
       Id: i.toString(),
@@ -177,16 +161,7 @@ export const parseSite = async function (req, res) {
   })
   sites = _.chunk(sites, 10)
   await Site.default.delete({domainName: site.domain})
-  eachLimit(sites, 10, async function (chunk, callback) {
-    try {
-        const messages = {
-        Entries: chunk,
-        QueueUrl: sqsUrl
-      }
-      await sqs.sendMessageBatchAsync(messages)
-      return callback()
-    } catch (e) { console.log(e) }
-  },() => {
+  eachLimit(sites, 100, pushToLambda ,() => {
     return res.status(200).send({status: data.sites.length + ' site added to the processing queue!'})
   })
   
@@ -215,7 +190,7 @@ export const status = async function (req, res) {
 
 export const getProducts = async function (req, res) {
   const page = req.params
-  const products = await Product.getTopProducts(100)
+  const products = await Diff.scan('difference').gt(0).exec()
   console.log(products.length)
   return res.send(products)
 }
@@ -252,7 +227,18 @@ function shuffle(array) {
 }
 
 const invokeLambda = () => {
-  return axios.get('https://mjl05xiv1a.execute-api.eu-central-1.amazonaws.com/prod/shop-parser-production', {
+  return axios.get('https://mjl05xiv1a.execute-api.eu-central-1.amazonaws.com/prod', {
           headers: {'x-api-key': '8XGbYeQwSqa5TwanMAJP6QMH1Ix0Yrj6ax5vQoW8'}
         }).then(console.log).catch(console.error)
 }
+async function pushToLambda(chunk, callback) {
+    try {
+        const messages = {
+        Entries: chunk,
+        QueueUrl: sqsUrl
+      }
+      chunk = await sqs.sendMessageBatchAsync(messages)
+      chunk = null
+      return callback()
+    } catch (e) { console.log(e) }
+  }
