@@ -4,7 +4,7 @@ import URL from 'url'
 import _ from 'lodash'
 import * as Site from '../models/site'
 import * as Product from '../models/product'
-import Diff from '../models/diff'
+import * as Diff from '../models/diff'
 import Promise from 'bluebird'
 import AWS from 'aws-sdk'
 import eachLimit from 'async/eachLimit'
@@ -69,7 +69,7 @@ export const parseSitemap = async function (req, res) {
  */
 export const enqueProducts = async function (req, res) {
     try {
-      let resp = await Product.getAllProducts()
+      let resp = await Diff.getAllProducts()
       resp = await shuffle(resp)
       let message = resp.map((site, i) => {
         let payload = {
@@ -190,7 +190,7 @@ export const status = async function (req, res) {
 
 export const getProducts = async function (req, res) {
   const page = req.params
-  const products = await Diff.scan('difference').gt(0).exec()
+  const products = await Diff.default.scan('difference').gt(0).exec()
   console.log(products.length)
   return res.send(products)
 }
