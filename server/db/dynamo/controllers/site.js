@@ -85,6 +85,7 @@ export const enqueProducts = async function (req, res) {
       message = _.chunk(message, 10)
       eachLimit(message, 25, pushToLambda, (err) => {
         invokeLambda()
+        invokeLambda()
         .then(() => {
           return res.send({
             itemsAdded: sites.length
@@ -160,7 +161,7 @@ export const parseSite = async function (req, res) {
     }
   })
   sites = _.chunk(sites, 10)
-  await Site.default.delete({domainName: site.domain})
+  //await Site.default.delete({domainName: site.domain})
   eachLimit(sites, 100, pushToLambda ,() => {
     return res.status(200).send({status: data.sites.length + ' site added to the processing queue!'})
   })
@@ -225,11 +226,12 @@ function shuffle(array) {
     return resolve(array);
   })
 }
-
 const invokeLambda = () => {
-  return axios.get('https://mjl05xiv1a.execute-api.eu-central-1.amazonaws.com/prod', {
-          headers: {'x-api-key': '8XGbYeQwSqa5TwanMAJP6QMH1Ix0Yrj6ax5vQoW8'}
-        }).then(console.log).catch(console.error)
+  return axios({
+    method: 'POST',
+    url: 'https://mjl05xiv1a.execute-api.eu-central-1.amazonaws.com/prod',
+    headers: {'x-api-key': '8XGbYeQwSqa5TwanMAJP6QMH1Ix0Yrj6ax5vQoW8'}
+  }).then(console.log).catch(console.error)
 }
 async function pushToLambda(chunk, callback) {
     try {

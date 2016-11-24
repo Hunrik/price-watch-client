@@ -1,6 +1,7 @@
 import Promise from 'bluebird'
 import dynamoose from 'dynamoose'
-
+import NodeCache from 'node-cache'
+const cache = new NodeCache({ stdTTL: 1000, checkperiod: 120 })
 /**
  * Site Schema
  */
