@@ -6,7 +6,7 @@ import path from 'path'
 import flash from 'express-flash'
 import methodOverride from 'method-override'
 import unsupportedMessage from '../db/unsupportedMessage'
-import { DB_TYPE, ENV } from './appConfig'
+import { DB_TYPE, ENV, ENQUE_KEY } from './appConfig'
 import { session as dbSession } from '../db'
 import gzip from 'compression'
 import helmet from 'helmet'
@@ -81,6 +81,7 @@ export default (app) => {
   console.log(`===>  Environment: ${ENV}`)
   console.log(`===>  Listening on port: ${app.get('port')}`)
   console.log(`===>  Using DB TYPE: ${DB_TYPE}`)
+  console.log(`===>  Auth key for enque endpoint: ${ENQUE_KEY}`)
   if (ENV === 'production') {
     console.log('===> 🚦  Note: In order for authentication to work in production')
     console.log('===>           you will need a secure HTTPS connection')

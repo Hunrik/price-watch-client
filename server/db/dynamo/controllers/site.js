@@ -5,6 +5,7 @@ import _ from 'lodash'
 import * as Site from '../models/site'
 import * as Product from '../models/product'
 import * as Diff from '../models/diff'
+import { LAMBDA_KEY, ENQUE_KEY } from '../../../config/appConfig'
 import Promise from 'bluebird'
 import AWS from 'aws-sdk'
 import eachLimit from 'async/eachLimit'
@@ -68,6 +69,7 @@ export const parseSitemap = async function (req, res) {
  * Add product to price checking queue
  */
 export const enqueProducts = async function (req, res) {
+    if( req.query.key !== ENQUE_KEY) return res.status(401).send('Invalid auth key')
     try {
       let resp = await Diff.getAllProducts()
       resp = await shuffle(resp)
@@ -233,7 +235,7 @@ const invokeLambda = () => {
   return axios({
     method: 'POST',
     url: 'https://mjl05xiv1a.execute-api.eu-central-1.amazonaws.com/prod',
-    headers: {'x-api-key': '8XGbYeQwSqa5TwanMAJP6QMH1Ix0Yrj6ax5vQoW8'}
+    headers: {'x-api-key': LAMBDA_KEY}
   }).then(console.log).catch(console.error)
 }
 async function pushToLambda(chunk, callback) {

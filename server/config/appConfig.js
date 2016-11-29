@@ -12,5 +12,7 @@ function defaultExport () {}
 
 defaultExport.DB_TYPE = 'DYNAMO'
 defaultExport.ENV = process.env.NODE_ENV || 'development'
+defaultExport.LAMBDA_KEY = process.env.LAMBDA_KEY || ''
+defaultExport.ENQUE_KEY = process.env.ENQUE_KEY || ''
 
 module.exports = defaultExport
