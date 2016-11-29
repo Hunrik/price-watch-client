@@ -1,7 +1,7 @@
 import Promise from 'bluebird'
 import dynamoose from 'dynamoose'
-import NodeCache from 'node-cache'
-const cache = new NodeCache({ stdTTL: 1000, checkperiod: 120 })
+/*import NodeCache from 'node-cache'
+const cache = new NodeCache({ stdTTL: 1000, checkperiod: 120 })*/
 /**
  * Site Schema
  */
@@ -110,7 +110,7 @@ export const list = (skip) => {
       .catch(reject)
   })
 }
-export const getAllProducts = async function (limit) {
+/*export const getAllProducts = async function (limit) {
     try {
       const cached = await cache.get('products')
       if (cached === undefined) {
@@ -139,7 +139,7 @@ export const getTopProducts = async function (limit) {
       }
       return cached
     } catch (e) { throw new Error(e) }
-}
+}*/
 /**
  * @typedef Site
  */

@@ -71,6 +71,7 @@ export const enqueProducts = async function (req, res) {
     try {
       let resp = await Diff.getAllProducts()
       resp = await shuffle(resp)
+      console.log('After shuffle', resp.length)
       let message = resp.map((site, i) => {
         let payload = {
           type: 'product',
@@ -82,7 +83,9 @@ export const enqueProducts = async function (req, res) {
           DelaySeconds: 0
         }
       })
+      console.log('After prepare for SQS', message.length)
       message = _.chunk(message, 10)
+      console.log('After chunking', message.length)
       eachLimit(message, 25, pushToLambda, (err) => {
         invokeLambda()
         invokeLambda()

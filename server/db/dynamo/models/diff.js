@@ -1,7 +1,7 @@
 import Promise from 'bluebird'
 import dynamoose from 'dynamoose'
-import NodeCache from 'node-cache'
-const cache = new NodeCache({ stdTTL: 1000, checkperiod: 120 })
+import cacheManager from 'cache-manager'
+var memoryCache = cacheManager.caching({store: 'memory', max: 100, ttl: 300/*seconds*/});
 /**
  * Site Schema
  */
@@ -41,7 +41,7 @@ const Diff = dynamoose.model('Diff', DiffSchema)
  */
 export const getAllProducts = async function (limit) {
     try {
-      const cached = await cache.get('products')
+      const cached = await memoryCache.get('products')
       if (cached === undefined) {
         let i = 0
         let sites = await Diff.scan().exec()
@@ -50,13 +50,20 @@ export const getAllProducts = async function (limit) {
           console.log('Cyclin', i++)
           let resp = await Diff.scan().startAt(lastElem).exec()
           lastElem = resp.lastKey
+          console.log('Response: ', resp.length)
           sites = sites.concat(resp)
         } 
-        cache.set('products', sites)
+        console.log('Setting cache')
+        await memoryCache.set('products', sites)
+        console.log('Serving from DB')
         return sites
       }
+      console.log('Serving from cache')
       return cached
-    } catch (e) { throw new Error(e) }
+    } catch (e) {
+      console.log(e) 
+      throw new Error(e)
+    }
 }
 
 export default Diff
