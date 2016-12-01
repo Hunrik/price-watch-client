@@ -46,7 +46,7 @@ export const parseSitemap = async function (req, res) {
           DelaySeconds: 0
         }
       })
-      message = _.chunk(message, 10)
+      message = _.chunk(message, 10)[0]
       eachLimit(message, 10, (chunk, callback) => {
         const messages = {
           Entries: chunk,
