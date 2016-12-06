@@ -6,7 +6,7 @@ addons:
       - sshpass
 before_deploy:
   - ssh-keyscan $DEPLOY_HOST >> ~/.ssh/known_hosts
-  - ssh $DEPLOY_USER@$DEPLOY_HOST $DEPLOY_PATH/deploy.sh
+  - ssh $DEPLOY_USER@$DEPLOY_HOST /var/www/deploy/deploy.sh
 deploy:
   provider: script
   skip_cleanup: true
