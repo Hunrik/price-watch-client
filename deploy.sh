@@ -1,4 +1,5 @@
 #!/bin/sh
+ssh-keyscan $DEPLOY_HOST >> ~/.ssh/known_hosts
 rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ $DEPLOY_USER@$DEPLOY_HOST:/var/www/deploy
 ssh $DEPLOY_USER@$DEPLOY_HOST
 cd /var/www/deploy
