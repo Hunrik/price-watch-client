@@ -7,7 +7,8 @@ addons:
 before_deploy:
   - mkdir build
   - rm -rf node_modules
-  - tar -czf package.tgz ./
+  - mv compiled build && mv public build && mv package.json build
+  - tar -czf package.tgz build
   - ssh-keyscan $DEPLOY_HOST >> ~/.ssh/known_hosts
   - scp package.tgz $DEPLOY_USER@$DEPLOY_HOST:/var/www/deploy
   - ssh $DEPLOY_USER@$DEPLOY_HOST $DEPLOY_PATH/deploy.sh
