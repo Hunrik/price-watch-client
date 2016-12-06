@@ -46,7 +46,7 @@ export const parseSitemap = async function (req, res) {
           DelaySeconds: 0
         }
       })
-      message = _.chunk(message, 10)
+      message = _.chunk(message, 10)[0]
       eachLimit(message, 10, (chunk, callback) => {
         const messages = {
           Entries: chunk,
@@ -168,7 +168,7 @@ export const parseSite = async function (req, res) {
   sites = _.chunk(sites, 10)
   //await Site.default.delete({domainName: site.domain})
   eachLimit(sites, 100, pushToLambda ,() => {
-    return res.status(200).send({status: data.sites.length + ' site added to the processing queue!'})
+    return res.status(200).send({status: data.length + ' site added to the processing queue!'})
   })
   
 }
