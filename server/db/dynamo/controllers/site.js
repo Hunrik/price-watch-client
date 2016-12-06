@@ -168,7 +168,7 @@ export const parseSite = async function (req, res) {
   sites = _.chunk(sites, 10)
   //await Site.default.delete({domainName: site.domain})
   eachLimit(sites, 100, pushToLambda ,() => {
-    return res.status(200).send({status: data.sites.length + ' site added to the processing queue!'})
+    return res.status(200).send({status: data.length + ' site added to the processing queue!'})
   })
   
 }
